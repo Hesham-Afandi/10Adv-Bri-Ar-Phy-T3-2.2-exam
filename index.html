@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌀 Grade 11 Advanced Physics - Diffraction & Gratings (2.2)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Cairo', sans-serif; }
+        body.en-mode { font-family: 'Inter', sans-serif; }
+        .correct { background-color: #dcfce7 !important; border-color: #16a34a !important; }
+        .incorrect { background-color: #fee2e2 !important; border-color: #dc2626 !important; }
+        .formula { font-family: 'Times New Roman', serif; font-style: italic; direction: ltr; display: inline-block; }
+        .timer-warning { color: #dc2626 !important; animation: pulse 1s infinite; }
+        @keyframes pulse { 50% { opacity: 0.7; } }
+        @media print { .no-print { display: none !important; } }
+        .success-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-weight: bold; font-size: 0.875rem; }
+        .grade-excellent { background: #dcfce7; color: #166534; }
+        .grade-good { background: #fef3c7; color: #92400e; }
+        .grade-pass { background: #dbeafe; color: #1e40af; }
+        .grade-fail { background: #fee2e2; color: #991b1b; }
+        .lang-switch {
+            position: fixed; top: 16px; left: 16px; z-index: 100;
+            background: white; padding: 6px; border-radius: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15); display: flex; gap: 4px;
+            border: 2px solid #0d9488;
+        }
+        [dir="ltr"] .lang-switch { left: auto; right: 16px; }
+        .lang-btn {
+            padding: 6px 14px; border-radius: 20px; cursor: pointer; font-weight: bold;
+            transition: all 0.3s; border: none; font-size: 0.875rem;
+            background: transparent; color: #6b7280;
+        }
+        .lang-btn.active { background: #0d9488; color: white; box-shadow: 0 2px 6px rgba(13,148,136,0.4); }
+        .lang-btn:hover:not(.active) { background: #f0fdfa; color: #0d9488; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 p-4 md:p-8 min-h-screen">
+
+    <div class="lang-switch no-print">
+        <button class="lang-btn active" onclick="setLanguage('ar')" id="btn-ar">عربي</button>
+        <button class="lang-btn" onclick="setLanguage('en')" id="btn-en">EN</button>
+    </div>
+
+    <div id="timer-container" class="max-w-4xl mx-auto mb-4 text-center no-print">
+        <div class="bg-white p-4 rounded-xl shadow-md inline-block border-2 border-teal-100">
+            <span class="text-gray-600 ml-2" data-ar="⏱️ الوقت المتبقي:" data-en="⏱️ Time Remaining:">⏱️ الوقت المتبقي:</span>
+            <span id="timer" class="text-2xl font-bold text-teal-600 font-mono">45:00</span>
+        </div>
+    </div>
+
+    <div class="max-w-4xl mx-auto mb-6 flex flex-wrap gap-3 justify-center no-print">
+        <button onclick="toggleAnswers()" class="bg-teal-600 hover:bg-teal-700 text-white px-5 py-2 rounded-lg font-medium transition shadow cursor-pointer" data-ar="👁️ إظهار / إخفاء الإجابات" data-en="👁️ Show / Hide Answers">👁️ إظهار / إخفاء الإجابات</button>
+        <button onclick="window.print()" class="bg-gray-800 hover:bg-gray-900 text-white px-5 py-2 rounded-lg font-medium transition shadow cursor-pointer" data-ar="🖨️ طباعة / PDF" data-en="🖨️ Print / PDF">🖨️ طباعة / PDF</button>
+    </div>
+
+    <header class="max-w-4xl mx-auto bg-white p-6 rounded-xl shadow-md mb-8 border-r-4 border-teal-600">
+        <div class="text-center">
+            <h1 class="text-2xl md:text-3xl font-bold text-gray-900 mb-2" data-ar="🌀 فيزياء الصف الحادي عشر متقدم" data-en="🌀 Grade 11 Advanced Physics">🌀 فيزياء الصف الحادي عشر متقدم</h1>
+            <h2 class="text-lg text-teal-600 font-semibold" data-ar="الدرس 2.2: الحيود ومحزوز الحيود" data-en="Lesson 2.2: Diffraction & Diffraction Gratings">الدرس 2.2: الحيود ومحزوز الحيود</h2>
+            <p class="text-sm text-gray-600 mt-2" data-ar="الحيود، محزوز الحيود، الأقراص المضغوطة، مطياف الحيود، وحد التباين" data-en="Diffraction, Diffraction Gratings, Optical Discs, Spectrometer & Resolution Limit">الحيود، محزوز الحيود، الأقراص المضغوطة، مطياف الحيود، وحد التباين</p>
+        </div>
+        <div class="mt-4 flex flex-wrap justify-center gap-4 text-sm text-gray-600">
+            <span><span data-ar="📅 التاريخ:" data-en="📅 Date:">📅 التاريخ:</span> <input type="text" class="border-b border-gray-400 bg-transparent w-28 text-center"></span>
+            <span><span data-ar="👤 الاسم:" data-en="👤 Name:">👤 الاسم:</span> <input type="text" id="studentName" class="border-b border-gray-400 bg-transparent w-32 text-center" placeholder="Enter name"></span>
+            <span><span data-ar="🏫 الشعبة:" data-en="🏫 Class:">🏫 الشعبة:</span> <input type="text" id="studentClass" class="border-b border-gray-400 bg-transparent w-28 text-center" placeholder="Class"></span>
+            <span><span data-ar="⏱️ المدة: 45 دقيقة" data-en="⏱️ Duration: 45 min">⏱️ المدة: 45 دقيقة</span></span>
+            <span><span data-ar="📊 المجموع: 100 درجة" data-en="📊 Total: 100 pts">📊 المجموع: 100 درجة</span></span>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto space-y-8" id="exam-content"></main>
+
+    <div class="text-center no-print pb-8 mt-8">
+        <button onclick="gradeExam()" class="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white text-lg px-10 py-4 rounded-xl font-bold shadow-xl transition transform hover:scale-105 cursor-pointer" data-ar="📝 تسليم وتصحيح الامتحان" data-en="📝 Submit & Grade Exam">📝 تسليم وتصحيح الامتحان</button>
+    </div>
+
+    <div id="results-panel" class="max-w-4xl mx-auto mt-8 bg-white p-8 rounded-2xl shadow-2xl border-t-4 border-emerald-500 hidden no-print">
+        <h2 class="text-3xl font-bold text-gray-900 mb-6 text-center" data-ar="📊 نتائج الامتحان" data-en="📊 Exam Results">📊 نتائج الامتحان</h2>
+        <div class="grid md:grid-cols-3 gap-4 mb-6">
+            <div class="bg-blue-50 p-4 rounded-xl text-center"><p data-ar="اسم الطالب" data-en="Student Name">اسم الطالب</p><p id="res-name" class="font-bold text-xl text-teal-700">-</p></div>
+            <div class="bg-purple-50 p-4 rounded-xl text-center"><p data-ar="التاريخ" data-en="Date">التاريخ</p><p id="res-date" class="font-bold text-xl text-purple-700">-</p></div>
+            <div class="bg-emerald-50 p-4 rounded-xl text-center"><p data-ar="المجموع" data-en="Score">المجموع</p><p id="res-total" class="font-bold text-3xl text-emerald-600">0 / 100</p></div>
+        </div>
+
+        <div class="text-center mb-6">
+            <span id="success-badge" class="success-badge grade-excellent">-</span>
+            <p id="success-percent" class="text-4xl font-bold text-emerald-600 mt-2">100%</p>
+            <p class="text-sm text-gray-500" data-ar="نسبة النجاح" data-en="Success Rate">نسبة النجاح</p>
+        </div>
+
+        <div class="bg-gray-50 p-6 rounded-xl mb-6">
+            <h3 class="font-bold text-lg mb-4 text-gray-800" data-ar="📈 تفصيل الأداء حسب القسم:" data-en="📈 Performance Breakdown:">📈 تفصيل الأداء حسب القسم:</h3>
+            <div class="space-y-3">
+                <div class="flex justify-between items-center">
+                    <span class="text-gray-700" data-ar="أساسيات الحيود" data-en="Diffraction Fundamentals">أساسيات الحيود</span>
+                    <span id="sec1-score" class="font-bold text-teal-600">0/4</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-gray-700" data-ar="محزوز الحيود ومعادلاته" data-en="Diffraction Gratings & Equations">محزوز الحيود ومعادلاته</span>
+                    <span id="sec2-score" class="font-bold text-teal-600">0/4</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-gray-700" data-ar="تطبيقات الحيود العملية" data-en="Practical Applications">تطبيقات الحيود العملية</span>
+                    <span id="sec3-score" class="font-bold text-teal-600">0/4</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-gray-700" data-ar="الدقة والتباين (Resolution)" data-en="Resolution & Limit">الدقة والتباين (Resolution)</span>
+                    <span id="sec4-score" class="font-bold text-teal-600">0/4</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-gray-700" data-ar="أسئلة SAT/ACT وتحليلية" data-en="SAT/ACT & Analytical">أسئلة SAT/ACT وتحليلية</span>
+                    <span id="sec5-score" class="font-bold text-teal-600">0/4</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mb-6">
+            <button id="sendEmailBtn" onclick="sendResultsToEmail()" class="bg-gradient-to-r from-teal-600 to-cyan-600 hover:from-teal-700 hover:to-cyan-700 text-white text-lg px-8 py-3 rounded-xl font-bold shadow-xl transition transform hover:scale-105 cursor-pointer" data-ar="📧 إرسال النتائج للمعلم" data-en="📧 Send Results to Teacher">📧 إرسال النتائج للمعلم</button>
+            <p id="emailStatus" class="text-sm mt-2 text-center font-medium"></p>
+        </div>
+
+        <div class="flex gap-3 justify-center">
+            <button onclick="window.print()" class="bg-gray-700 text-white px-6 py-3 rounded-lg font-semibold" data-ar="🖨️ طباعة النتائج" data-en="🖨️ Print Results">🖨️ طباعة النتائج</button>
+        </div>
+    </div>
+
+    <footer class="max-w-4xl mx-auto mt-10 mb-8 text-center text-gray-500 text-sm no-print">
+        © <span data-ar="فيزياء الصف الحادي عشر متقدم | الدرس 2.2: الحيود ومحزوز الحيود" data-en="Grade 11 Advanced Physics | Lesson 2.2: Diffraction & Gratings">فيزياء الصف الحادي عشر متقدم | الدرس 2.2: الحيود ومحزوز الحيود</span> | Mr. Mohammed Hesham
+    </footer>
+
+<script>
+const examData = {
+    sections: [
+        {
+            id: 'sec1',
+            title: { ar: '🔹 الجزء الأول: أساسيات الحيود', en: '🔹 Part 1: Diffraction Fundamentals' },
+            questions: [
+                {
+                    q: { ar: 'الحيود (Diffraction) يُعرَّف بأنه:', en: 'Diffraction is defined as:' },
+                    options: [
+                        { ar: 'انعكاس الموجات عن الحواجز', en: 'Reflection of waves off barriers' },
+                        { ar: 'انكسار الموجات عند الانتقال بين وسطين', en: 'Refraction of waves between two media' },
+                        { ar: 'انحناء الموجات حول الحواجز أو عند مرورها من فتحات ضيقة', en: 'Bending of waves around obstacles or through narrow openings' },
+                        { ar: 'تداخل موجتين معاً', en: 'Interference of two waves' }
+                    ],
+                    correct: 2,
+                    answer: { ar: 'الحيود هو انحناء الموجات عند مرورها حول الحواجز أو من فتحات ضيقة، وهو دليل على الطبيعة الموجية', en: 'Diffraction is the bending of waves around obstacles or through narrow openings, proving wave nature' }
+                },
+                {
+                    q: { ar: 'الحيود يكون واضحاً (أقصى) عندما:', en: 'Diffraction is most pronounced when:' },
+                    options: [
+                        { ar: 'حجم الفتحة أكبر بكثير من الطول الموجي', en: 'Opening is much larger than wavelength' },
+                        { ar: 'حجم الفتحة أصغر بكثير من الطول الموجي', en: 'Opening is much smaller than wavelength' },
+                        { ar: 'حجم الفتحة ≈ الطول الموجي', en: 'Opening size ≈ wavelength' },
+                        { ar: 'لا توجد علاقة بين الحجم والطول الموجي', en: 'No relation between size and wavelength' }
+                    ],
+                    correct: 2,
+                    answer: { ar: 'الحيود يكون أقصى عندما يكون حجم الفتحة أو الحاجز مقارباً للطول الموجي (W ≈ λ)', en: 'Diffraction is maximum when opening size is comparable to wavelength (W ≈ λ)' }
+                },
+                {
+                    q: { ar: 'نمط الحيود للشق المفرد (Single Slit) يتكون من:', en: 'The diffraction pattern of a single slit consists of:' },
+                    options: [
+                        { ar: 'هدب مركزي عريض ومضيء جداً، مع أهداب جانبية أقل سطوعاً', en: 'A wide, very bright central fringe with dimmer side fringes' },
+                        { ar: 'أهداب متساوية العرض والسطوع', en: 'Equal width and brightness fringes' },
+                        { ar: 'نقطة مضيئة واحدة فقط', en: 'Only one bright point' },
+                        { ar: 'ظلام تام بدون أي ضوء', en: 'Complete darkness without any light' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'نمط الشق المفرد: هدب مركزي عريض ومضيء (يحوي معظم الطاقة)، مع أهداب جانبية أضيق وأقل سطوعاً', en: 'Single slit pattern: wide bright central fringe (contains most energy), with narrower dimmer side fringes' }
+                },
+                {
+                    q: { ar: 'إذا ضيَّقنا عرض الشق (a)، فإن عرض الهدب المركزي:', en: 'If we narrow the slit width (a), the central fringe width:' },
+                    options: [
+                        { ar: 'يقل (يضيق)', en: 'Decreases (narrows)' },
+                        { ar: 'يزداد (يتسع)', en: 'Increases (widens)' },
+                        { ar: 'يبقى ثابتاً', en: 'Remains constant' },
+                        { ar: 'يختفي تماماً', en: 'Disappears completely' }
+                    ],
+                    correct: 1,
+                    answer: { ar: 'عرض الهدب المركزي يتناسب عكسياً مع عرض الشق: W = 2λL/a، فكلما قلّ a زاد W', en: 'Central fringe width is inversely proportional to slit width: W = 2λL/a, so as a decreases, W increases' }
+                }
+            ]
+        },
+        {
+            id: 'sec2',
+            title: { ar: '🔹 الجزء الثاني: محزوز الحيود ومعادلاته', en: '🔹 Part 2: Diffraction Gratings & Equations' },
+            questions: [
+                {
+                    q: { ar: 'محزوز الحيود (Diffraction Grating) يتكون من:', en: 'A diffraction grating consists of:' },
+                    options: [
+                        { ar: 'شق واحد ضيق', en: 'One narrow slit' },
+                        { ar: 'شقَّين متوازيين', en: 'Two parallel slits' },
+                        { ar: 'عدد كبير جداً من الشقوق المتوازية المتقاربة جداً', en: 'A very large number of very close parallel slits' },
+                        { ar: 'عدسة محدبة', en: 'A convex lens' }
+                    ],
+                    correct: 2,
+                    answer: { ar: 'محزوز الحيود: لوح به آلاف الشقوق المتوازية المتقاربة (مثلاً 500 شق/مم)، يُنتج أنماط حيود حادة وواضحة', en: 'Diffraction grating: plate with thousands of close parallel slits (e.g., 500 slits/mm), producing sharp clear patterns' }
+                },
+                {
+                    q: { ar: 'معادلة محزوز الحيود للأهداب المضيئة (Maxima) هي:', en: 'The diffraction grating equation for maxima is:' },
+                    options: [
+                        { ar: 'd·sin(θ) = mλ  حيث m = 0, ±1, ±2, ...', en: 'd·sin(θ) = mλ  where m = 0, ±1, ±2, ...' },
+                        { ar: 'd·sin(θ) = (m + ½)λ', en: 'd·sin(θ) = (m + ½)λ' },
+                        { ar: 'a·sin(θ) = mλ', en: 'a·sin(θ) = mλ' },
+                        { ar: 'd·cos(θ) = mλ', en: 'd·cos(θ) = mλ' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'معادلة المحزوز: d·sin(θ) = mλ حيث d المسافة بين الشقوق، θ زاوية الحيود، m رتبة الهدب', en: 'Grating equation: d·sin(θ) = mλ where d is slit spacing, θ is diffraction angle, m is fringe order' }
+                },
+                {
+                    q: { ar: 'محزوز حيود المسافة بين شقوقه d = 2 × 10⁻⁶ m، سقط عليه ضوء طوله الموجي λ = 500 nm. زاوية الحيود للهدب الأول (m=1) تساوي:', en: 'A diffraction grating with slit spacing d = 2 × 10⁻⁶ m is illuminated by light of wavelength λ = 500 nm. The diffraction angle for the first order (m=1) equals:' },
+                    options: [
+                        { ar: '30°', en: '30°' },
+                        { ar: '14.5°', en: '14.5°' },
+                        { ar: '45°', en: '45°' },
+                        { ar: '60°', en: '60°' }
+                    ],
+                    correct: 1,
+                    answer: { ar: 'd·sin(θ) = mλ → sin(θ) = mλ/d = (1 × 500×10⁻⁹)/(2×10⁻⁶) = 0.25 → θ = sin⁻¹(0.25) ≈ 14.5°', en: 'd·sin(θ) = mλ → sin(θ) = mλ/d = (1 × 500×10⁻⁹)/(2×10⁻⁶) = 0.25 → θ = sin⁻¹(0.25) ≈ 14.5°' }
+                },
+                {
+                    q: { ar: 'مقارنة بمexperiment شقي يونغ، محزوز الحيود يُنتج أهداباً:', en: 'Compared to Young\'s double-slit experiment, a diffraction grating produces fringes that are:' },
+                    options: [
+                        { ar: 'أعرض وأقل وضوحاً', en: 'Wider and less distinct' },
+                        { ar: 'أضيق وأكثر حدة وسطوعاً', en: 'Narrower, sharper, and brighter' },
+                        { ar: 'متساوية تماماً', en: 'Exactly the same' },
+                        { ar: 'غير موجودة', en: 'Non-existent' }
+                    ],
+                    correct: 1,
+                    answer: { ar: 'محزوز الحيود يُنتج أهداباً أضيق وأشد سطوعاً وأكثر حدة من تجربة يونغ بسبب التداخل من آلاف الشقوق', en: 'Diffraction grating produces narrower, brighter, sharper fringes than Young\'s due to interference from thousands of slits' }
+                }
+            ]
+        },
+        {
+            id: 'sec3',
+            title: { ar: '🔹 الجزء الثالث: تطبيقات الحيود العملية', en: '🔹 Part 3: Practical Applications of Diffraction' },
+            questions: [
+                {
+                    q: { ar: 'الأقراص المضغوطة (CD/DVD) تعمل كمحزوز حيود لأن:', en: 'Optical discs (CD/DVD) act as diffraction gratings because:' },
+                    options: [
+                        { ar: 'سطحها أملس تماماً', en: 'Their surface is perfectly smooth' },
+                        { ar: 'تحتوي على مسارات (pits) حلزونية متقاربة جداً تفصل بينها مسافات منتظمة ≈ الطول الموجي للضوء', en: 'They have very close spiral tracks (pits) with regular spacing ≈ light wavelength' },
+                        { ar: 'مصنوعة من الزجاج', en: 'Made of glass' },
+                        { ar: 'لونها أسود', en: 'Their color is black' }
+                    ],
+                    correct: 1,
+                    answer: { ar: 'مسارات CD متباعدة بـ ≈ 1.6 μm، ومسارات DVD بـ ≈ 0.74 μm، وهذه المسافات قريبة من الطول الموجي للضوء فتنعكس كألوان قوس قزح', en: 'CD tracks are spaced ≈ 1.6 μm, DVD ≈ 0.74 μm, close to light wavelength, producing rainbow colors' }
+                },
+                {
+                    q: { ar: 'أقراص Blu-ray تخزن بيانات أكثر من DVD لأن:', en: 'Blu-ray discs store more data than DVD because:' },
+                    options: [
+                        { ar: 'حجمها الفيزيائي أكبر', en: 'Their physical size is larger' },
+                        { ar: 'لونها مختلف', en: 'Their color is different' },
+                        { ar: 'تستخدم ليزر أزرق بطول موجي أقصر (405 nm)، فيمكن تصغير المسارات وزيادة الكثافة', en: 'They use a blue laser with shorter wavelength (405 nm), allowing smaller tracks and higher density' },
+                        { ar: 'مصنوعة من مادة أغلى', en: 'Made of more expensive material' }
+                    ],
+                    correct: 2,
+                    answer: { ar: 'Blu-ray يستخدم ليزر أزرق (λ = 405 nm) بدلاً من الأحمر (650 nm في DVD)، فالطول الأقصر يسمح بمسارات أضيق وكثافة تخزين أعلى (25 GB مقابل 4.7 GB)', en: 'Blu-ray uses blue laser (λ = 405 nm) vs red (650 nm in DVD), shorter wavelength allows narrower tracks and higher density (25 GB vs 4.7 GB)' }
+                },
+                {
+                    q: { ar: 'مطياف الحيود (Diffraction Spectrometer) يُستخدم لـ:', en: 'A diffraction spectrometer is used to:' },
+                    options: [
+                        { ar: 'قياس درجة الحرارة فقط', en: 'Measure temperature only' },
+                        { ar: 'تحليل الضوء إلى أطواله الموجية المكونة لدراسة التركيب الكيميائي للنجوم والمواد', en: 'Analyze light into its component wavelengths to study chemical composition of stars and materials' },
+                        { ar: 'تكبير الصور', en: 'Magnify images' },
+                        { ar: 'قياس الضغط الجوي', en: 'Measure atmospheric pressure' }
+                    ],
+                    correct: 1,
+                    answer: { ar: 'مطياف الحيود يحلل الضوء إلى طيفه، وكل عنصر كيميائي يُصدر أطوالاً موجية مميزة (بصمة ضوئية)، فيُستخدم لدراسة النجوم والمواد', en: 'Spectrometer analyzes light into its spectrum; each chemical element emits characteristic wavelengths (optical fingerprint), used to study stars and materials' }
+                },
+                {
+                    q: { ar: 'ألوان أجنحة بعض الفراشات وفقاعات الصابون تنتج عن:', en: 'The colors of some butterfly wings and soap bubbles are produced by:' },
+                    options: [
+                        { ar: 'صبغات كيميائية فقط', en: 'Chemical pigments only' },
+                        { ar: 'التداخل والحيود في الأغشية الرقيقة (Thin-film interference)', en: 'Thin-film interference and diffraction' },
+                        { ar: 'الانعكاس العادي', en: 'Normal reflection' },
+                        { ar: 'امتصاص الضوء', en: 'Light absorption' }
+                    ],
+                    correct: 1,
+                    answer: { ar: 'الألوان التركيبية (Iridescence) في الفراشات وفقاعات الصابون ناتجة عن التداخل في الأغشية الرقيقة + الحيود في الهياكل الدقيقة', en: 'Iridescence in butterflies and soap bubbles results from thin-film interference + diffraction in fine structures' }
+                }
+            ]
+        },
+        {
+            id: 'sec4',
+            title: { ar: '🔹 الجزء الرابع: الدقة والتباين (Resolution)', en: '🔹 Part 4: Resolution & Limit' },
+            questions: [
+                {
+                    q: { ar: 'حد ريليه للتباين (Rayleigh Criterion) يُعطى بالعلاقة:', en: 'The Rayleigh Criterion for resolution is given by:' },
+                    options: [
+                        { ar: 'θ = 1.22 λ/D  حيث D قطر الفتحة', en: 'θ = 1.22 λ/D  where D is aperture diameter' },
+                        { ar: 'θ = λ·D', en: 'θ = λ·D' },
+                        { ar: 'θ = D/λ', en: 'θ = D/λ' },
+                        { ar: 'θ = 1.22 D·λ', en: 'θ = 1.22 D·λ' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'حد ريليه: θ = 1.22 λ/D، حيث θ أصغر زاوية يمكن تمييزها، λ الطول الموجي، D قطر الفتحة (أو العدسة)', en: 'Rayleigh criterion: θ = 1.22 λ/D, where θ is minimum resolvable angle, λ is wavelength, D is aperture (or lens) diameter' }
+                },
+                {
+                    q: { ar: 'لتحسين دقة التلسكوب (تقليل θ)، يجب:', en: 'To improve telescope resolution (reduce θ), we should:' },
+                    options: [
+                        { ar: 'تقليل قطر العدسة الشيئية', en: 'Reduce objective lens diameter' },
+                        { ar: 'زيادة قطر العدسة الشيئية (D) أو استخدام طول موجي أقصر (λ)', en: 'Increase objective lens diameter (D) or use shorter wavelength (λ)' },
+                        { ar: 'تقصير بؤرة العدسة', en: 'Shorten the focal length' },
+                        { ar: 'تغيير لون التلسكوب', en: 'Change the telescope color' }
+                    ],
+                    correct: 1,
+                    answer: { ar: 'من θ = 1.22 λ/D: لتحسين الدقة (تقليل θ) نزيد D أو نقلل λ، ولهذا التلسكوبات الكبيرة أدق', en: 'From θ = 1.22 λ/D: to improve resolution (reduce θ), increase D or decrease λ; this is why large telescopes are more precise' }
+                },
+                {
+                    q: { ar: 'تلسكوب هابل الفضائي قطره D = 2.4 m. سبب وضعه في الفضاء (بدلاً من الأرض) هو:', en: 'The Hubble Space Telescope has diameter D = 2.4 m. The reason for placing it in space (rather than Earth) is:' },
+                    options: [
+                        { ar: 'ليكون أقرب من النجوم', en: 'To be closer to the stars' },
+                        { ar: 'لتجنب تشويه الغلاف الجوي الذي يُدهور الدقة', en: 'To avoid atmospheric distortion that degrades resolution' },
+                        { ar: 'لتقليل وزنه', en: 'To reduce its weight' },
+                        { ar: 'للتكلفة الأقل', en: 'For lower cost' }
+                    ],
+                    correct: 2,
+                    answer: { ar: 'الغلاف الجوي يشوه الضوء (الرؤية الفلكية)، فالتلسكوب الفضائي يتجنب هذا التشويه ويحقق دقة قريبة من الحد النظري', en: 'Atmosphere distorts light (seeing), so space telescope avoids this and achieves resolution near theoretical limit' }
+                },
+                {
+                    q: { ar: 'فتحة العين البشرية في النهار ≈ 3 mm. عند استخدام ضوء طوله الموجي 550 nm، أصغر زاوية يمكن تمييزها ≈:', en: 'The human eye aperture in daylight ≈ 3 mm. Using light of wavelength 550 nm, the minimum resolvable angle ≈:' },
+                    options: [
+                        { ar: '2.2 × 10⁻⁴ rad (≈ 0.013°)', en: '2.2 × 10⁻⁴ rad (≈ 0.013°)' },
+                        { ar: '2.2 × 10⁻² rad', en: '2.2 × 10⁻² rad' },
+                        { ar: '2.2 × 10⁻⁶ rad', en: '2.2 × 10⁻⁶ rad' },
+                        { ar: '2.2 rad', en: '2.2 rad' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'θ = 1.22 λ/D = 1.22 × 550×10⁻⁹ / 3×10⁻³ ≈ 2.2 × 10⁻⁴ rad ≈ 0.013°', en: 'θ = 1.22 λ/D = 1.22 × 550×10⁻⁹ / 3×10⁻³ ≈ 2.2 × 10⁻⁴ rad ≈ 0.013°' }
+                }
+            ]
+        },
+        {
+            id: 'sec5',
+            title: { ar: '🔹 الجزء الخامس: أسئلة SAT/ACT وتحليلية', en: '🔹 Part 5: SAT/ACT & Analytical Questions' },
+            questions: [
+                {
+                    q: { ar: 'في اختبار SAT: محزوز حيود به 500 شق/مم، سقط عليه ضوء أبيض. أي لون ينحرف بأكبر زاوية في الرتبة الأولى؟', en: 'In SAT test: A diffraction grating has 500 slits/mm, illuminated by white light. Which color is diffracted at the largest angle in first order?' },
+                    options: [
+                        { ar: 'الأحمر (λ ≈ 700 nm)', en: 'Red (λ ≈ 700 nm)' },
+                        { ar: 'الأخضر (λ ≈ 550 nm)', en: 'Green (λ ≈ 550 nm)' },
+                        { ar: 'البنفسجي (λ ≈ 400 nm)', en: 'Violet (λ ≈ 400 nm)' },
+                        { ar: 'جميعها بنفس الزاوية', en: 'All at the same angle' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'من d·sin(θ) = mλ، الزاوية θ تزداد بزيادة λ، فالأحمر (أطول λ) ينحرف بأكبر زاوية', en: 'From d·sin(θ) = mλ, angle θ increases with λ, so red (longest λ) diffracts at largest angle' }
+                },
+                {
+                    q: { ar: 'في اختبار ACT: إذا ضاعفنا عرض الشق المفرد (a → 2a)، فإن عرض الهدب المركزي:', en: 'In ACT test: If we double the single slit width (a → 2a), the central fringe width:' },
+                    options: [
+                        { ar: 'يتضاعف', en: 'Doubles' },
+                        { ar: 'يقل إلى النصف', en: 'Halves' },
+                        { ar: 'يبقى ثابتاً', en: 'Remains constant' },
+                        { ar: 'يزداد 4 مرات', en: 'Increases 4 times' }
+                    ],
+                    correct: 1,
+                    answer: { ar: 'W = 2λL/a، فإذا تضاعف a فإن W تقل إلى النصف (علاقة عكسية)', en: 'W = 2λL/a, so if a doubles, W halves (inverse relationship)' }
+                },
+                {
+                    q: { ar: 'في اختبار SAT: لماذا تُرى ألوان قوس قزح على سطح CD عند تسليط ضوء أبيض عليه؟', en: 'In SAT test: Why do rainbow colors appear on a CD surface when white light shines on it?' },
+                    options: [
+                        { ar: 'القرص ملون بالفعل', en: 'The disc is actually colored' },
+                        { ar: 'المسارات الحلزونية الدقيقة تعمل كمحزوز حيود، فتنحرف الأطوال الموجية المختلفة بزوايا مختلفة', en: 'The fine spiral tracks act as a diffraction grating, so different wavelengths diffract at different angles' },
+                        { ar: 'الضوء ينعكس فقط', en: 'Light only reflects' },
+                        { ar: 'القرص يمتص بعض الألوان', en: 'The disc absorbs some colors' }
+                    ],
+                    correct: 1,
+                    answer: { ar: 'المسارات الحلزونية على CD (تباعد ≈ 1.6 μm) تعمل كمحزوز حيود، فيتحلل الضوء الأبيض إلى ألوانه', en: 'Spiral tracks on CD (spacing ≈ 1.6 μm) act as diffraction grating, so white light is dispersed into its colors' }
+                },
+                {
+                    q: { ar: 'في اختبار ACT: تلسكوبان لهما نفس البعد البؤري لكن قطرَيهما D₁ = 10 cm و D₂ = 20 cm. أيهما أدق؟', en: 'In ACT test: Two telescopes have the same focal length but diameters D₁ = 10 cm and D₂ = 20 cm. Which is more precise?' },
+                    options: [
+                        { ar: 'التلسكوب الأول (D₁)', en: 'Telescope 1 (D₁)' },
+                        { ar: 'التلسكوب الثاني (D₂) لأنه يجمع ضوءاً أكثر ويحقق تبايناً أفضل', en: 'Telescope 2 (D₂) because it collects more light and achieves better resolution' },
+                        { ar: 'كلاهما بنفس الدقة', en: 'Both have the same resolution' },
+                        { ar: 'لا يمكن المقارنة', en: 'Cannot be compared' }
+                    ],
+                    correct: 1,
+                    answer: { ar: 'من θ = 1.22 λ/D، كلما زاد D قلّ θ (تحسنت الدقة). D₂ ضعف D₁ فتباينه أفضل بمرتين', en: 'From θ = 1.22 λ/D, larger D gives smaller θ (better resolution). D₂ is twice D₁ so its resolution is twice as good' }
+                }
+            ]
+        }
+    ]
+};
+
+let currentLang = 'ar';
+let timeRemaining = 2700;
+let timerInterval;
+
+function setLanguage(lang) {
+    currentLang = lang;
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    
+    document.getElementById('btn-ar').classList.toggle('active', lang === 'ar');
+    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+    
+    document.body.classList.toggle('en-mode', lang === 'en');
+    
+    document.querySelectorAll('[data-ar][data-en]').forEach(el => {
+        el.textContent = el.getAttribute(`data-${lang}`);
+    });
+    
+    renderExam();
+}
+
+function renderExam() {
+    const container = document.getElementById('exam-content');
+    const labels = {
+        ar: { option: ['أ', 'ب', 'ج', 'د'], answer: '✅ الإجابة:' },
+        en: { option: ['A', 'B', 'C', 'D'], answer: '✅ Answer:' }
+    };
+    const lbl = labels[currentLang];
+    const isRTL = currentLang === 'ar';
+    
+    let html = '';
+    examData.sections.forEach((section, sIdx) => {
+        html += `
+        <section class="bg-white p-6 rounded-xl shadow-lg">
+            <h2 class="text-xl font-bold mb-4 text-teal-700">${section.title[currentLang]}</h2>
+            <ol id="section-${sIdx}-list" class="space-y-4 text-sm">`;
+            
+        section.questions.forEach((q, qIdx) => {
+            const globalIdx = sIdx * 4 + qIdx;
+            const borderSide = isRTL ? 'border-r-4 pr-4' : 'border-l-4 pl-4';
+            html += `
+                <li class="${borderSide} border-teal-500 py-2" id="q-${globalIdx}">
+                    <strong>${globalIdx + 1}.</strong> ${q.q[currentLang]}<br>`;
+                    
+            q.options.forEach((opt, oIdx) => {
+                const radioSide = isRTL ? 'mr-4 ml-2' : 'ml-4 mr-2';
+                html += `
+                    <label class="cursor-pointer block mt-1 ${isRTL ? 'mr-4' : 'ml-4'}">
+                        <input type="radio" name="q${globalIdx}" value="${String.fromCharCode(97 + oIdx)}" class="${radioSide}"> 
+                        ${lbl.option[oIdx]}) ${opt[currentLang]}
+                    </label>`;
+            });
+            
+            html += `
+                    <div class="answer-box text-green-700 mt-2 font-medium hidden">
+                        ${lbl.answer} ${lbl.option[q.correct]}) ${q.options[q.correct][currentLang]} — ${q.answer[currentLang]}
+                    </div>
+                </li>`;
+        });
+        
+        html += `
+            </ol>
+        </section>`;
+    });
+    
+    container.innerHTML = html;
+}
+
+function startTimer() {
+    document.getElementById('timer-container').style.display = 'block';
+    timerInterval = setInterval(() => {
+        timeRemaining--;
+        const minutes = Math.floor(timeRemaining / 60);
+        const seconds = timeRemaining % 60;
+        const timerEl = document.getElementById('timer');
+        timerEl.textContent = `${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
+        if (timeRemaining <= 300) timerEl.classList.add('timer-warning');
+        if (timeRemaining <= 0) {
+            clearInterval(timerInterval);
+            alert(currentLang === 'ar' ? "انتهى الوقت! سيتم تسليم الامتحان تلقائياً." : "Time's up! Exam will be submitted automatically.");
+            gradeExam();
+        }
+    }, 1000);
+}
+
+function toggleAnswers() {
+    document.querySelectorAll('.answer-box').forEach(el => el.classList.toggle('hidden'));
+}
+
+function gradeExam() {
+    let correctCount = 0;
+    const correctAnswersLetters = [
+        'c','c','a','b',  // Q1-4: Diffraction Fundamentals
+        'c','a','b','b',  // Q5-8: Diffraction Gratings
+        'b','c','b','b',  // Q9-12: Practical Applications
+        'a','b','c','a',  // Q13-16: Resolution
+        'a','b','b','b'   // Q17-20: SAT/ACT
+    ];
+    
+    let sec1 = 0, sec2 = 0, sec3 = 0, sec4 = 0, sec5 = 0;
+    
+    for (let i = 0; i < 20; i++) {
+        const selected = document.querySelector(`input[name="q${i}"]:checked`);
+        const li = document.getElementById(`q-${i}`);
+        
+        if (li) {
+            const isCorrect = selected && selected.value === correctAnswersLetters[i];
+            
+            if (isCorrect) {
+                correctCount++;
+                li.classList.add('correct');
+                li.classList.remove('incorrect');
+                if (i < 4) sec1++;
+                else if (i < 8) sec2++;
+                else if (i < 12) sec3++;
+                else if (i < 16) sec4++;
+                else sec5++;
+            } else {
+                li.classList.add('incorrect');
+                li.classList.remove('correct');
+            }
+        }
+    }
+
+    const score = (correctCount / 20) * 100;
+    const successRate = Math.round(score);
+    
+    document.getElementById('res-total').textContent = `${Math.round(score)} / 100`;
+    document.getElementById('res-name').textContent = document.getElementById('studentName').value || (currentLang === 'ar' ? 'طالب' : 'Student');
+    document.getElementById('res-date').textContent = new Date().toLocaleDateString(currentLang === 'ar' ? 'ar-AE' : 'en-US');
+    
+    document.getElementById('sec1-score').textContent = `${sec1}/4`;
+    document.getElementById('sec2-score').textContent = `${sec2}/4`;
+    document.getElementById('sec3-score').textContent = `${sec3}/4`;
+    document.getElementById('sec4-score').textContent = `${sec4}/4`;
+    document.getElementById('sec5-score').textContent = `${sec5}/4`;
+    
+    const badge = document.getElementById('success-badge');
+    const percent = document.getElementById('success-percent');
+    percent.textContent = `${successRate}%`;
+    
+    if (currentLang === 'ar') {
+        if (successRate >= 90) { badge.textContent = 'ممتاز'; badge.className = 'success-badge grade-excellent'; }
+        else if (successRate >= 75) { badge.textContent = 'جيد جداً'; badge.className = 'success-badge grade-good'; }
+        else if (successRate >= 50) { badge.textContent = 'جيد'; badge.className = 'success-badge grade-pass'; }
+        else { badge.textContent = 'يحتاج تحسين'; badge.className = 'success-badge grade-fail'; }
+    } else {
+        if (successRate >= 90) { badge.textContent = 'Excellent'; badge.className = 'success-badge grade-excellent'; }
+        else if (successRate >= 75) { badge.textContent = 'Very Good'; badge.className = 'success-badge grade-good'; }
+        else if (successRate >= 50) { badge.textContent = 'Good'; badge.className = 'success-badge grade-pass'; }
+        else { badge.textContent = 'Needs Improvement'; badge.className = 'success-badge grade-fail'; }
+    }
+    
+    document.getElementById('results-panel').classList.remove('hidden');
+    document.getElementById('results-panel').scrollIntoView({ behavior: 'smooth' });
+    document.getElementById('sendEmailBtn').classList.remove('hidden');
+}
+
+function sendResultsToEmail() {
+    const btn = document.getElementById('sendEmailBtn');
+    const status = document.getElementById('emailStatus');
+    btn.disabled = true;
+    btn.textContent = currentLang === 'ar' ? '⏳ جاري الإرسال...' : '⏳ Sending...';
+
+    const name = document.getElementById('studentName').value || 'N/A';
+    const studentClass = document.getElementById('studentClass').value || (currentLang === 'ar' ? 'غير محدد' : 'N/A');
+    const date = document.querySelector('input[type="text"]').value || new Date().toLocaleDateString(currentLang === 'ar' ? 'ar-AE' : 'en-US');
+    const score = document.getElementById('res-total').textContent;
+    const successRate = document.getElementById('success-percent').textContent;
+    const sec1 = document.getElementById('sec1-score').textContent;
+    const sec2 = document.getElementById('sec2-score').textContent;
+    const sec3 = document.getElementById('sec3-score').textContent;
+    const sec4 = document.getElementById('sec4-score').textContent;
+    const sec5 = document.getElementById('sec5-score').textContent;
+
+    const dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+    const font = currentLang === 'ar' ? 'Cairo' : 'Inter';
+    
+    const sectionNames = {
+        ar: ['أساسيات الحيود', 'محزوز الحيود ومعادلاته', 'تطبيقات الحيود العملية', 'الدقة والتباين', 'أسئلة SAT/ACT'],
+        en: ['Diffraction Fundamentals', 'Diffraction Gratings & Equations', 'Practical Applications', 'Resolution & Limit', 'SAT/ACT Questions']
+    };
+    const sn = sectionNames[currentLang];
+
+    let answersHTML = `<div dir="${dir}" style="font-family: '${font}', sans-serif;">
+        <h3 style="color:#0d9488;">📊 ${currentLang === 'ar' ? 'تفصيل الأداء - الحيود ومحزوز الحيود (2.2)' : 'Performance Details - Diffraction & Gratings (2.2)'}:</h3>
+        <p><strong>${currentLang === 'ar' ? 'الطالب' : 'Student'}:</strong> ${name} | <strong>${currentLang === 'ar' ? 'الشعبة' : 'Class'}:</strong> ${studentClass}</p>
+        <ul>
+            <li>${sn[0]}: ${sec1}</li>
+            <li>${sn[1]}: ${sec2}</li>
+            <li>${sn[2]}: ${sec3}</li>
+            <li>${sn[3]}: ${sec4}</li>
+            <li>${sn[4]}: ${sec5}</li>
+        </ul>
+        <table style="border:1px solid #e5e7eb; border-collapse:collapse; width:100%; font-size:14px; direction: ${dir};">
+        <tr style="background:#0d9488; color:white;"><th style="border:1px solid #e5e7eb; padding:8px;">${currentLang === 'ar' ? 'السؤال' : 'Q#'}</th><th style="border:1px solid #e5e7eb; padding:8px;">${currentLang === 'ar' ? 'الإجابة المختارة' : 'Selected'}</th><th style="border:1px solid #e5e7eb; padding:8px;">${currentLang === 'ar' ? 'الحالة' : 'Status'}</th></tr>`;
+    
+    const correctAnswersLetters = ['c','c','a','b','c','a','b','b','b','c','b','b','a','b','c','a','a','b','b','b'];
+    
+    for (let i = 0; i < 20; i++) {
+        const sel = document.querySelector(`input[name="q${i}"]:checked`);
+        const isCorrect = sel && sel.value === correctAnswersLetters[i];
+        answersHTML += `<tr><td style="border:1px solid #e5e7eb; padding:6px;">${i + 1}</td><td style="border:1px solid #e5e7eb; padding:6px;">${sel ? sel.value.toUpperCase() : '-'}</td><td style="border:1px solid #e5e7eb; padding:6px; color:${isCorrect ? 'green' : 'red'}">${isCorrect ? '✅ ' + (currentLang === 'ar' ? 'صحيح' : 'Correct') : '❌ ' + (currentLang === 'ar' ? 'خطأ' : 'Wrong')}</td></tr>`;
+    }
+    answersHTML += '</table></div>';
+
+    const PUBLIC_KEY = "Rb3Lq8tXaFmc5YHUH";
+    const SERVICE_ID = "service_w15m64i";
+    const TEMPLATE_ID = "template_5b0u2tq";
+    const TARGET_EMAIL = "mohammedhesham872@gmail.com";
+
+    emailjs.init(PUBLIC_KEY);
+    const templateParams = {
+        to_email: TARGET_EMAIL,
+        student_name: name,
+        exam_date: date,
+        total_score: score,
+        success_rate: successRate,
+        answers_table: answersHTML
+    };
+
+    emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams)
+        .then(() => {
+            status.textContent = currentLang === 'ar' ? '✅ تم الإرسال بنجاح! تحقق من Gmail.' : '✅ Sent successfully! Check Gmail.';
+            status.style.color = '#059669';
+            btn.textContent = currentLang === 'ar' ? '✓ تم الإرسال' : '✓ Sent';
+        })
+        .catch(err => {
+            status.textContent = currentLang === 'ar' ? '❌ فشل الإرسال. تحقق من الإعدادات.' : '❌ Failed to send. Check settings.';
+            status.style.color = '#dc2626';
+            btn.disabled = false;
+            btn.textContent = currentLang === 'ar' ? '📧 إعادة المحاولة' : '📧 Retry';
+            console.error('EmailJS Error:', err);
+        });
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    renderExam();
+    startTimer();
+});
+</script>
+</body>
+</html>
